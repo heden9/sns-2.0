@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "sdkVersion": "19.0.0",
+    "name": "阴阳师",
+    "icon": "./yys.png",
+    "version": "1.0.0",
+    "slug": "your-app-slug",
+    "ios": {
+      "bundleIdentifier": "com.bengi.sns"
+    },
+    "android": {
+      "package": "com.bengi.sns"
+    }
+  }
+}
