@@ -28,7 +28,7 @@ const iconArr = {
 };
 export default class Demo extends React.Component {
     constructor(){
-        super(arguments);
+        super(...arguments);
         this._getData = this._getData.bind(this);
     }
     state = {

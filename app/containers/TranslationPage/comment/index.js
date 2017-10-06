@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Sep from '../../../components/Separated';
 import { TouchBtn }  from '../../../components/normalComponent';
+import { Octicons } from '@expo/vector-icons';
 const data = {
     forward: 2161,
     star: '2万',
@@ -156,7 +157,10 @@ function Item({headImgUrl, userID, userName, comment, comment_num, star, time}) 
                 <View style={styles.bottomBar}>
                     <Text style={styles.small}>{time}</Text>
                     <View>
-                        <Text style={styles.small}>{star}</Text>
+                        <Text style={styles.small}>
+                            <Octicons name={"thumbsup"} size={15}/>
+                            {' '+star}
+                        </Text>
                     </View>
                 </View>
                 <Sep height={8}/>
@@ -224,6 +228,7 @@ const styles = StyleSheet.create({
     },
     item: {
         flexDirection: 'row',
+        paddingRight: 10,
     },
     item_img: {
         width: headImgR,
