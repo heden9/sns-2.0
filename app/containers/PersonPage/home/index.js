@@ -40,7 +40,7 @@ export default class PersonPage extends React.Component{
         navigate(str);
     };
     LoginClickHandle = () => {
-        if(UserInfo.user == null){
+        if(!UserInfo.user){
             this.enterHandle('Login');
         }else{
 
@@ -54,7 +54,7 @@ export default class PersonPage extends React.Component{
         }else{
             return (
                 <View style={styles.back}>
-                    <LoginComponent onPress={this.LoginClickHandle} name={UserInfo.user && UserInfo.user.name}/>
+                    <LoginComponent onPress={this.LoginClickHandle} {...UserInfo.user} />
                     <View>
                         <PersonBtn
                             iconName="bubble"
@@ -70,7 +70,7 @@ export default class PersonPage extends React.Component{
                         <Sep/>
                         <PersonBtn
                             iconName="settings"
-                            title={'设置'} />
+                            title={'设置'}onPress={this.enterHandle.bind(null,'Voice')}/>
                     </View>
                 </View>
             );

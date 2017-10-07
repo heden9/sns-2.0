@@ -90,6 +90,7 @@ SSNav = StackNavigator({
     },
     Login: {
         screen: Login,
+        path: 'login/',
         navigationOptions: {
             title: '登录',
             // headerTintColor: 'black',

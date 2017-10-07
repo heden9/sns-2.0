@@ -10,6 +10,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SvgBackground from '../SvgBackground';
 import defaultImg from '../../static/img/Drum.png';
 export default class LoginComponent extends React.PureComponent{
+    static defaultProps = {
+        headPortrait: defaultImg,
+        name: '',
+    };
     render() {
         return (
             <SvgBackground style={{height: 150}}>
@@ -22,7 +26,7 @@ export default class LoginComponent extends React.PureComponent{
                         <View style={styles.HeadPortrait}>
                             {
                                 this.props.name ?
-                                    <Image source={this.props.img || defaultImg} style={{height: 60,width: 60}}/>:
+                                    <Image source={this.props.headPortrait} style={styles.img}/>:
                                     <Icon name='user-circle' size={60} color={'#eee'}/>
                             }
                         </View>
@@ -32,7 +36,7 @@ export default class LoginComponent extends React.PureComponent{
         );
     }
 }
-
+const R = 60;
 const styles = StyleSheet.create({
     header:{
         height: 150,
@@ -43,10 +47,17 @@ const styles = StyleSheet.create({
     },
     HeadPortrait:{
         overflow: 'hidden',
-        width:60,
-        height:60,
+        position: 'relative',
+        zIndex: 2,
+        width:R,
+        height:R,
         backgroundColor: 'white',
-        borderRadius: 50
+        borderRadius: 30
+    },
+    img: {
+        height: R,
+        width: R,
+        borderRadius: R/2,
     }
 });
 

@@ -8,7 +8,8 @@ import {
     RefreshControl,
     FlatList,
     Animated,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import Sep from '../../../components/Separated';
 import Footer from '../../../components/renderFooter';
@@ -26,24 +27,34 @@ export default class StarPage extends React.PureComponent{
         this.getData = this.getData.bind(this);
     }
     _refreshHandle = () => {
-        this.setState({
-            refreshing: true
-        });
-        setTimeout(()=>
-        this.setState({
-            refreshing: false
-        }), 2000);
+        this.getData();
     };
     async getData () {
-        this.setState({
-            refreshing: true
-        });
-        const { data: { alwaysVisitData, allFollow } } = await getFollow();
-        this.setState({
-            refreshing: false,
-            alwaysVisitData: [...alwaysVisitData],
-            allFollow: [...allFollow]
-        })
+        try {
+            this.setState({
+                refreshing: true
+            });
+            const { data, code } = await getFollow();
+            if(!data){
+                this.setState({
+                    refreshing: false
+                });
+                if(code === 2){
+                    this.props.navigation.navigate('Login');
+                }
+                return;
+            }
+            const { alwaysVisitData, allFollow } = data;
+            this.setState({
+                refreshing: false,
+                alwaysVisitData: [...alwaysVisitData],
+                allFollow: [...allFollow]
+            })
+        } catch (err) {
+            Alert.alert('网络错误','',[{text: 'Ok', onPress: ()=>this.setState({
+                refreshing: false
+            })}],{ cancelable: false });
+        }
     };
     componentDidMount(){
         this.getData();
@@ -67,16 +78,19 @@ export default class StarPage extends React.PureComponent{
                     ))
                 }
                 <Sep title={'全部关注'} height={30}/>
-                <AnimatedFlat
-                    style={styles.flat}
-                    data={this.state.allFollow}
-                    ItemSeparatorComponent={()=><View style={styles.sepLine}/>}
-                    ListFooterComponent={<Footer/>}
-                    keyExtractor={item => item.userID}
-                    renderItem={({item, index}) => (
-                        <Item {...item} key={item.userID}/>
-                    )}
-                />
+                {
+                    this.state.allFollow.length !== 0 &&
+                    <AnimatedFlat
+                        style={styles.flat}
+                        data={this.state.allFollow}
+                        ItemSeparatorComponent={()=><View style={styles.sepLine}/>}
+                        ListFooterComponent={<Footer/>}
+                        keyExtractor={item => item.userID}
+                        renderItem={({item, index}) => (
+                            <Item {...item} key={item.userID}/>
+                        )}
+                    />
+                }
             </ScrollView>
         )
     }

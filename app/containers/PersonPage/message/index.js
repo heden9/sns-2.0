@@ -7,7 +7,7 @@ import {
     Image,
     View,
     FlatList,
-    Button,
+    Alert,
     RefreshControl,
     Animated,
     TouchableHighlight
@@ -36,13 +36,7 @@ export default class Demo extends React.Component {
         refreshing: false,
     };
     _refreshHandle = () => {
-        this.setState({
-            refreshing: true
-        });
-        setTimeout(()=>
-            this.setState({
-                refreshing: false
-            }), 2000);
+        this._getData();
     };
     _onDelete = (userID) => {
         this.setState({
@@ -53,20 +47,36 @@ export default class Demo extends React.Component {
         })
     };
     async _getData () {
-        this.setState({
-            refreshing: true,
-        });
-        const { data: { message, inform } } = await getMessage();
-        const temp = inform.concat(message).map(item => {
-            return {
-                ...item,
-                headImgUrl: iconArr[item.userName]
+        try {
+            this.setState({
+                refreshing: true,
+            });
+            const { data, code } = await getMessage();
+            if(!data){
+                this.setState({
+                    refreshing: false
+                });
+                if(code === 2){
+                    this.props.navigation.navigate('Login');
+                }
+                return;
             }
-        });
-        this.setState({
-            refreshing: false,
-            messageData: temp
-        })
+            const { message, inform } = data;
+            const temp = inform.concat(message).map(item => {
+                return {
+                    ...item,
+                    headImgUrl: iconArr[item.userName]
+                }
+            });
+            this.setState({
+                refreshing: false,
+                messageData: temp
+            })
+        } catch (err) {
+            Alert.alert('网络错误','',[{text: 'Ok', onPress: ()=>this.setState({
+                refreshing: false
+            })}],{ cancelable: false });
+        }
     }
     componentDidMount() {
         this._getData();
@@ -165,7 +175,7 @@ const styles = StyleSheet.create({
     }
 });
 
-function Item({headImgUrl, userName, dynamics, userID, left_icon, badge, onPress=()=>{alert('press')}, onDelete=()=>{alert('删除')} }) {
+function Item({headImgUrl=require('../../../static/img/s.jpg'), userName, dynamics, userID, left_icon, badge, onPress=()=>{alert('press')}, onDelete=()=>{alert('删除')} }) {
     const swipeoutBtns = [
         {
             component: <View style={styles.swipeBtn}><Text style={styles.swipeBtn_text}>删除</Text></View>,

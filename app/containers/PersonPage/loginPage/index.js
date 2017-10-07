@@ -11,14 +11,18 @@ import {
 import { observer } from 'mobx-react';
 import UserInfo from '../../../mobx/store';
 import LoginPng from '../../../static/img/login.png';
-import { login } from '../../../fetch/Login/login';
+import { login } from '../../../fetch/fetchUserInfo';
+import ImageWithTitle from '../../../components/ImageWithTitle';
+import LoadingIcon from '../../../static/icon/loading.gif';
 @observer
 export default class LoginPage extends React.Component{
-    constructor(props, context){
-        super(props,context);
+    constructor(){
+        super(...arguments);
+        this.checkLogin = this.checkLogin.bind(this);
         this.state = {
             account: '',
-            password: ''
+            password: '',
+            loading: false
         };
     }
     changeHandle = (Text,name) =>{
@@ -26,39 +30,51 @@ export default class LoginPage extends React.Component{
             [name]: Text
         });
     };
-    checkLogin = () => {
-        if(!this.state.account || !this.state.password)
-            alert('请输入账号密码');
-        else{
-            const result = login({name: this.state.account,pwd: this.state.password});
-            console.log(result);
-            result.then((res)=>res.json())
-                .then((json)=>{
-                if(json == null)
-                    return;
-                if(json == false)
-                    Alert.alert('账号或密码错误');
-                else{
-                    UserInfo.login(json);
-                    Alert.alert(
-                        '亲，登录成功！',
-                        '',
-                        [
-                            {text: 'OK', onPress: () => this.props.navigation.goBack()},
-                        ],
-                        { cancelable: false }
-                    );
-                }
-            })
-                .catch((err)=>{
-                    console.warn(err);
-                    Alert.alert('网络超时TnT');
-            });
-        }
+    async checkLogin() {
+       try {
+           const account = this.state.account.trim();
+           const password = this.state.password.trim();
+           if(!account || !password){
+               Alert.alert('请输入账号密码');
+               return;
+           }
+           this.setState({
+               loading: true
+           });
+           const { data } = await login({acc: account, pwd: password});
+           if(!data){
+               return;
+           }else {
+               this.setState({
+                   loading: false
+               });
+               UserInfo.login(data);
+               Alert.alert(
+                   '亲，登录成功！',
+                   '',
+                   [
+                       {text: 'OK', onPress: this.props.navigation.goBack},
+                   ]
+               );
+           }
+       } catch(err) {
+           Alert.alert('网络错误','',[{text: 'Ok', onPress: ()=>this.setState({
+               loading: false
+           })}],{ cancelable: false });
+       }
     };
     render(){
         return(
             <View style={styles.container}>
+                {
+                    this.state.loading ?
+                        <View style={styles.loading_icon}>
+                            <ImageWithTitle
+                                title="加载中..."
+                                source={LoadingIcon}/>
+                        </View>
+                        : null
+                }
                 <Text style={[{margin: 10},styles.Text]}>登录后可多端同步、享受更多的学习资源</Text>
                 <View style={[styles.form,{width: WindowInfo.width * .9}]}>
                     <InputComponent
@@ -111,6 +127,17 @@ const styles = StyleSheet.create({
         fontSize: 13,
         height: 45,
         flex: 1
+    },
+    loading_icon: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 999,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
 
