@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 function parseJSON(response) {
   return response.json();
 }
@@ -28,7 +29,7 @@ export default async function request(url, options) {
           options.headers = {...options.headers, token: sendToken };
       }
   } catch (err){
-    console.log(err.message);
+    console.warn(err.message);
   }
   const response = await fetch(url, options);
 
@@ -37,7 +38,7 @@ export default async function request(url, options) {
   const  { data, code, message } = await response.json();
   let newData = null;
   if(code !== 0){
-    alert(message);
+      Alert.alert(message);
   }else {
     newData = data;
   }
@@ -47,6 +48,7 @@ export default async function request(url, options) {
     headers: {},
   };
   const token = response.headers.get('token');
+  console.log('token', token);
   if(token){
       STORAGE.save({
           key: 'token',  // 注意:请不要在key中使用_下划线符号!
@@ -54,7 +56,7 @@ export default async function request(url, options) {
 
           // 如果不指定过期时间，则会使用defaultExpires参数
           // 如果设为null，则永不过期
-          expires: 1000*24*7
+          expires: 1000*24*7*3600
       });
   }
   if (response.headers.get('x-total-count')) {

@@ -1,5 +1,6 @@
 import { observable,action,computed } from 'mobx';
 import {Alert} from 'react-native';
+import Toast from 'react-native-root-toast';
 class Store {
     @observable localMyCollect = new Map();
     @observable TabHeight = 50;
@@ -9,8 +10,9 @@ class Store {
         STORAGE.save({
             key: 'USERINFO',
             data: this.user,
-            expires: 100*24*7
+            expires: 1000 * 3600 * 24 * 7
         });
+        this.loadLocalCollect();
     }
     @computed get collectLen(){
         return this.localMyCollect.values().length;
@@ -37,9 +39,9 @@ class Store {
     @action saveUserInfo(info) {
         this.user = info;
     }
-    loadLocalInfo(){
+    @action loadLocalCollect(){
         STORAGE.load({
-            key: 'USER'
+            key: `USER${this.user.id}`
         }).then(ret => {
             // 如果找到数据，则在then方法中返回
             if(!ret)
@@ -50,6 +52,8 @@ class Store {
             // 或者有其他异常，则在catch中返回
             Alert.alert(err.message);
         });
+    }
+    loadLocalInfo(){
         STORAGE.load({
             key: 'USERINFO'
         }).then(ret => {
@@ -57,15 +61,23 @@ class Store {
             if(!ret)
                 return;
             this.saveUserInfo(ret);
+            this.loadLocalCollect();
         }).catch(err => {
             // 如果没有找到数据且没有sync方法，
             // 或者有其他异常，则在catch中返回
-            Alert.alert('登录过期');
+            const toast = Toast.show('登录过期TnT', {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.BOTTOM,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                delay: 0,
+            });
         })
     }
     saveCollect(){
         STORAGE.save({
-            key: 'USER',  // 注意:请不要在key中使用_下划线符号!
+            key: `USER${this.user.id}`,  // 注意:请不要在key中使用_下划线符号!
             data: this.localMyCollect,
 
             // 如果不指定过期时间，则会使用defaultExpires参数

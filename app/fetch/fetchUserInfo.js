@@ -36,3 +36,29 @@ export async function getMessage() {
         },
     });
 }
+
+export async function cancelFollow(data) {
+    return request(HOST+'/api/follow',{
+        method: 'DELETE',
+        mode: "cors",
+        credentials: 'include',
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+}
+
+export async function addFollow(data) {
+    return request(HOST+'/api/follow',{
+        method: 'PUT',
+        mode: "cors",
+        credentials: 'include',
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+}

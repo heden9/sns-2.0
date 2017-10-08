@@ -2,6 +2,8 @@ import React from 'react';
 import {
     View,
     StyleSheet,
+    Text,
+    TouchableOpacity,
     Platform
 } from 'react-native';
 import Expo from 'expo';
@@ -12,7 +14,9 @@ import FollowingPage from '../../containers/PersonPage/followingPage';
 import MessagePage from '../../containers/PersonPage/message';
 import CollectionPage from '../../containers/PersonPage/collection';
 import VoicePage from '../../containers/TranslationPage/voicePage';
+import ChatPage from '../../containers/PersonPage/chat';
 import { loadAssetsAsync } from '../../static/imageManager';
+import { Ionicons } from '@expo/vector-icons';
 import { Constants } from 'expo';
 const styles = StyleSheet.create({
     androidNav: {
@@ -36,6 +40,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         height: 0,
         marginTop: -20
+    },
+    icon: {
+        marginRight: 10
     }
 });
 
@@ -56,6 +63,9 @@ const Following = ({ navigation }) => (
 );
 const Voice = ({ navigation }) => (
     <VoicePage navigation={navigation}/>
+);
+const Chat = ({ navigation }) => (
+    <ChatPage  navigation={navigation}/>
 );
 export default class WHOLE extends React.Component{
     state = {
@@ -152,18 +162,26 @@ SSNav = StackNavigator({
             },
             gesturesEnabled: true,
         }
+    },
+    Chat: {
+        screen: Chat,
+        navigationOptions: ({navigation}) => ({
+            headerTitle: navigation.state.params.title,
+            headerTintColor: 'white',
+            headerStyle: initStyles(),
+            headerTitleStyle: {
+                fontWeight: '600',
+            },
+            headerBackTitleStyle: {
+                fontSize: 14
+            },
+            headerRight: (<TouchableOpacity style={styles.icon} >
+                <Ionicons size={23} color={'white'} name={'md-person'}/>
+            </TouchableOpacity>),
+            gesturesEnabled: true,
+        })
     }
 },{
     headerMode: 'screen',
 });
 
-
-if (!__DEV__) {
-    global.console = {
-        info: () => {},
-        log: () => {},
-        warn: () => {},
-        debug: () => {},
-        error: () => {},
-    };
-}

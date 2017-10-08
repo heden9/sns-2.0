@@ -78,7 +78,6 @@ export default class LoginPage extends React.Component{
                 <Text style={[{margin: 10},styles.Text]}>登录后可多端同步、享受更多的学习资源</Text>
                 <View style={[styles.form,{width: WindowInfo.width * .9}]}>
                     <InputComponent
-                        style={{borderTopLeftRadius: 4,borderTopRightRadius: 4}}
                         title={'账号：'}
                         placeHolder={'网易邮箱（163邮箱）'}
                         name={'account'}
@@ -142,14 +141,16 @@ const styles = StyleSheet.create({
 });
 
 const InputComponent = (props) => {
-    const {style, title, placeHolder, onChange, secure, name} = props;
+    const { title, placeHolder, onChange, secure, name} = props;
     return (
-        <View style={[style,styles.inputRow]}>
+        <View style={styles.inputRow}>
             <Text style={styles.Text}>{title}</Text>
             <TextInput
                 style={styles.input}
                 underlineColorAndroid={'transparent'}
                 placeholder={placeHolder}
+                autoFocus={title === '账号：'}
+                autoCapitalize={"none"}
                 secureTextEntry={secure}
                 onChangeText={(Text)=>onChange(Text,name)}/>
         </View>

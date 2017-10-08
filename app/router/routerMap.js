@@ -17,7 +17,6 @@ import Moments from '../containers/Moments';
 import Storage from '../storage';
 import UserInfo from '../mobx/store';
 import { observer } from 'mobx-react';
-
 function changeScreenOrientation() {
     Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT_UP);
 }
