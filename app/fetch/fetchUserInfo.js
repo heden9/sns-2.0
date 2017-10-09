@@ -62,3 +62,17 @@ export async function addFollow(data) {
         },
     });
 }
+
+
+export async function fetchChatHistory(data) {
+    return request(HOST+'/api/chat',{
+        method: 'POST',
+        mode: "cors",
+        credentials: 'include',
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    })
+}

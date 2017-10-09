@@ -218,7 +218,11 @@ class Item extends React.Component {
     };
     _enterChat = () => {
         this.props.navigate('Chat',{
-            title: this.props.userName
+            title: this.props.userName,
+            aimUser: {
+                userID: this.props.userID,
+                headImgUrl: this.props.headImgUrl
+            }
         });
     };
     render() {
