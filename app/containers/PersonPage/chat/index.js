@@ -188,7 +188,7 @@ class ChatItem extends React.Component{
     render(){
         const { headImgUrl, content, from_id} = this.props;
         const my = from_id === UserInfo.user.id;
-        const newHeadImg = my ? UserInfo.user.headPortrait : headImgUrl;
+        const newHeadImg = my ? require('../../../static/img/Drum.png') : require('../../../static/img/s.jpg');
         return (
             <View style={[styles.chat_container,my ? styles.reverse : null]}>
                 <Image style={styles.chat_img} source={newHeadImg}/>

@@ -2,7 +2,15 @@ import { observable,action,computed } from 'mobx';
 import { fetchChatHistory } from '../fetch/fetchUserInfo';
 import UserInfo from './store';
 class Chat {
-    @observable chatHistory = [];
+    @observable chatHistory = [
+        {
+            title: '2017 4.8',
+            data: [
+                {content: 'Welcome back!', from_id: 19, id: 1},
+                {content: 'Welcome back too!', from_id: 1, id: 2},
+            ]
+        }
+    ];
 
 
     @action async fetchChatUserInfo(to_id) {
