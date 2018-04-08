@@ -4,7 +4,7 @@
     "name": "阴阳师",
     "icon": "./yys.png",
     "version": "1.0.0",
-    "slug": "your-app-slug",
+    "slug": "yys",
     "ios": {
       "bundleIdentifier": "com.bengi.sns"
     },

@@ -210,11 +210,14 @@ class Item extends React.Component {
         }
     }
     pressHandle = (userID) => {
-        if(this.state.isFollow){
-            this._cancelFollow({id: userID});
-        }else {
-            this._addFollow({id: userID});
-        }
+        // if(this.state.isFollow){
+        //     this._cancelFollow({id: userID});
+        // }else {
+        //     this._addFollow({id: userID});
+        // }
+        this.setState({
+            isFollow: !this.state.isFollow
+        })
     };
     _enterChat = () => {
         this.props.navigate('Chat',{
@@ -230,7 +233,7 @@ class Item extends React.Component {
         return (
             <TouchableHighlight onPress={this._enterChat}>
                 <View style={styles.item}>
-                    <Image source={headImgUrl} style={styles.item_img}/>
+                    <Image source={require('../../../static/img/s.jpg')} style={styles.item_img}/>
                     <View style={styles.item_center}>
                         <Text style={styles.item_name}>{userName}</Text>
                         <Sep height={7}/>

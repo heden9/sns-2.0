@@ -5,8 +5,10 @@ class Store {
     @observable localMyCollect = new Map();
     @observable TabHeight = 50;
     @observable user = null;
+    @observable isLogin = false;
     @action login(data){
         this.user = data;
+        this.isLogin = true;
         STORAGE.save({
             key: 'USERINFO',
             data: this.user,
@@ -50,7 +52,7 @@ class Store {
         }).catch(err => {
             // 如果没有找到数据且没有sync方法，
             // 或者有其他异常，则在catch中返回
-            Alert.alert(err.message);
+            console.log(err.message);
         });
     }
     loadLocalInfo(){
@@ -76,14 +78,18 @@ class Store {
         })
     }
     saveCollect(){
-        STORAGE.save({
-            key: `USER${this.user.id}`,  // 注意:请不要在key中使用_下划线符号!
-            data: this.localMyCollect,
+        if (this.isLogin) {
+            STORAGE.save({
+                key: `USER${this.user.id}`,  // 注意:请不要在key中使用_下划线符号!
+                data: this.localMyCollect,
 
-            // 如果不指定过期时间，则会使用defaultExpires参数
-            // 如果设为null，则永不过期
-            expires: null
-        });
+                // 如果不指定过期时间，则会使用defaultExpires参数
+                // 如果设为null，则永不过期
+                expires: null
+            });
+        }else {
+
+        }
     }
 }
 const UserInfo = new Store();
