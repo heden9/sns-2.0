@@ -116,3 +116,9 @@
     ├── index.js
     └── load.js
 ```
+### 安装、运行
+首先安装xcode（mac环境下）、Android studio
+```bash
+  yarn && yarn run ios/android
+```
+
